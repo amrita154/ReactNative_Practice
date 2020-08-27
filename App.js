@@ -14,7 +14,7 @@ class App extends React.Component {
     this.state = {
       calculationText: '',
       resultText: '',
-      intermediateText:''
+      intermediateText: '',
     };
   }
   buttonPressed(num) {
@@ -25,33 +25,34 @@ class App extends React.Component {
       });
     } else {
       this.setState({
-        resultText:this.state.resultText+this.state.calculationText
+        resultText: this.state.resultText + this.state.calculationText,
       });
-      var n=0;
-      var str=this.state.resultText;
-      var nums=[];
-      for(let i=0;i<str.length;i++)
-      {
-        var a=0;
-        while(str[i]>='0'&&str[i]<='9')
-        {
-          a=a*10+(str[i]-'0');
+      var n = 0;
+      var str = this.state.resultText;
+      var nums = [];
+      for (let i = 0; i < str.length; i++) {
+        var a = 0;
+        while (str[i] >= '0' && str[i] <= '9') {
+          a = a * 10 + (str[i] - '0');
         }
         nums.push(a);
-        
-
       }
-
     }
   }
 
   operationPerformed(text) {
-   this.setState({
-     resultText:this.state.calculationText+text,
-     calculationText:'',
-   }) 
-   console.log(this.state.intermediateText)
-
+    if (text == 'CE') {
+      this.setState({
+        resultText: '',
+        calculationText: '',
+      });
+    } else {
+      this.setState({
+        resultText: this.state.calculationText + text,
+        calculationText: '',
+      });
+      console.log(this.state.intermediateText);
+    }
   }
   render() {
     let rows = [];
@@ -83,8 +84,8 @@ class App extends React.Component {
       rows.push(<View style={styles.row}>{row}</View>);
     }
     let ops = [];
-    let operator = ['+', '-', '/', '*'];
-    for (let i = 0; i < 4; i++) {
+    let operator = ['+', '-', '/', '*', 'CE'];
+    for (let i = 0; i < 5; i++) {
       ops.push(
         <TouchableOpacity
           style={styles.btn}
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     fontSize: 30,
-    padding: 20,
+    padding: 10,
   },
   numberButton: {
     backgroundColor: 'blue',
