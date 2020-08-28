@@ -14,46 +14,51 @@ class App extends React.Component {
     this.state = {
       calculationText: '',
       resultText: '',
-      intermediateText: '',
     };
   }
+
+  validateText() {
+    str = this.state.calculationText;
+    switch (str.slice(-1)) {
+      case '+':
+      case '-':
+      case '/':
+      case '*':
+        return false;
+    }
+    return true;
+  }
+
+  //on pressing the numbers
   buttonPressed(num) {
     //console.log(num);
     if (num != '=') {
+      if(this.state.calculationText.length<90){
       this.setState({
         calculationText: this.state.calculationText + num,
-      });
+      });}
+      
     } else {
       this.setState({
-        resultText: this.state.resultText + this.state.calculationText,
+        resultText: this.validateText() && eval(this.state.calculationText),
       });
-      var n = 0;
-      var str = this.state.resultText;
-      var nums = [];
-      for (let i = 0; i < str.length; i++) {
-        var a = 0;
-        while (str[i] >= '0' && str[i] <= '9') {
-          a = a * 10 + (str[i] - '0');
-        }
-        nums.push(a);
-      }
     }
   }
 
+  //on pressing the operators
   operationPerformed(text) {
-    if (text == 'CE') {
+    if (text == 'DEL') {
       this.setState({
         resultText: '',
         calculationText: '',
       });
     } else {
       this.setState({
-        resultText: this.state.calculationText + text,
-        calculationText: '',
+        calculationText: this.state.calculationText + text,
       });
-      console.log(this.state.intermediateText);
     }
   }
+
   render() {
     let rows = [];
     let nums = [
@@ -84,7 +89,7 @@ class App extends React.Component {
       rows.push(<View style={styles.row}>{row}</View>);
     }
     let ops = [];
-    let operator = ['+', '-', '/', '*', 'CE'];
+    let operator = ['+', '-', '/', '*', 'DEL'];
     for (let i = 0; i < 5; i++) {
       ops.push(
         <TouchableOpacity
@@ -92,8 +97,9 @@ class App extends React.Component {
           onPress={() => this.operationPerformed(operator[i])}>
           <Text
             style={{
-              fontSize: 30,
+              fontSize: 25,
               fontWeight: 'bold',
+              color: 'white',
             }}>
             {operator[i]}
           </Text>
@@ -126,11 +132,11 @@ const styles = StyleSheet.create({
   },
   result: {
     flex: 0.5,
-    backgroundColor: 'red',
+    backgroundColor: 'white',
   },
   calculation: {
     flex: 2,
-    backgroundColor: 'green',
+    backgroundColor: 'white',
   },
   button: {
     flex: 4,
@@ -138,13 +144,13 @@ const styles = StyleSheet.create({
   },
   numbers: {
     flex: 4,
-    backgroundColor: 'yellow',
+    backgroundColor: 'gray',
 
     padding: 40,
   },
   operations: {
     flex: 2,
-    backgroundColor: 'pink',
+    backgroundColor: 'black',
     justifyContent: 'space-around',
     alignItems: 'stretch',
     fontSize: 30,
@@ -155,13 +161,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
-    padding: 40,
+    padding: 30,
   },
   resultText: {
     justifyContent: 'flex-end',
     alignItems: 'center',
     fontSize: 30,
     padding: 10,
+    color:'gray'
   },
   numberButton: {
     backgroundColor: 'blue',
@@ -181,7 +188,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'stretch',
     alignSelf: 'stretch',
-    paddingLeft: 20,
+    paddingLeft: 30,
   },
 });
 
